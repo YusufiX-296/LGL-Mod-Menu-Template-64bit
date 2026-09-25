@@ -19,8 +19,11 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
+    - name: Accept Android Licenses
+      run: |
+        mkdir -p $HOME/.android
+        echo "### Turist / License acceptance" > $HOME/.android/repositories.cfg
+        yes | sdkmanager --licenses || true
 
     - name: Make Gradle Executable
       run: chmod +x gradlew
