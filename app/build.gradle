@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.mod.menu' // Projendeki namespace adı neyse o kalabilir
+    namespace 'com.mod.menu'
     compileSdk 33
 
     defaultConfig {
@@ -37,11 +37,10 @@ android {
     externalNativeBuild {
         cmake {
             path file('src/main/cpp/CMakeLists.txt')
-            version '3.22.1'
+            version '3.31.5'
         }
     }
 
-    // Çakışan .so kütüphanelerini önlemek için eklenen kısım:
     packagingOptions {
         pickFirst 'lib/arm64-v8a/libModMenu.so'
         pickFirst 'lib/armeabi-v7a/libModMenu.so'
