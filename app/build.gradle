@@ -1,38 +1,56 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 android {
-    compileSdkVersion 29
+    namespace 'com.mod.menu' // Projendeki namespace adı neyse o kalabilir
+    compileSdk 33
+
     defaultConfig {
-        applicationId "com.android.support"
-        minSdkVersion 19
-        targetSdkVersion 29
+        applicationId "com.mod.menu"
+        minSdk 24
+        targetSdk 33
         versionCode 1
-        versionName "3.2"
-        ndk {
-            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86'
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags ""
+                abiFilters 'arm64-v8a', 'armeabi-v7a'
+            }
         }
-        signingConfig signingConfigs.debug
     }
+
     buildTypes {
         release {
-            shrinkResources false
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-        debug {
-            shrinkResources false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
     externalNativeBuild {
-        ndkBuild {
-            path file('src/main/jni/Android.mk')
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            version '3.22.1'
         }
+    }
+
+    // Çakışan .so kütüphanelerini önlemek için eklenen kısım:
+    packagingOptions {
+        pickFirst 'lib/arm64-v8a/libModMenu.so'
+        pickFirst 'lib/armeabi-v7a/libModMenu.so'
+        pickFirst 'lib/x86/libModMenu.so'
+        pickFirst 'lib/x86_64/libModMenu.so'
     }
 }
 
-//dependencies must be placed below 'android' brackets to get it work on AIDE
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
 }
